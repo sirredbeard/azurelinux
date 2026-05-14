@@ -61,6 +61,7 @@ make DESTDIR=%{buildroot} install
 find %{buildroot} -name '*.la' -delete
 
 %check
+export LD_LIBRARY_PATH="$PWD/.libs:$LD_LIBRARY_PATH"
 TCMALLOC_SAMPLE_PARAMETER=128 && make check
 
 %ldconfig_scriptlets libs

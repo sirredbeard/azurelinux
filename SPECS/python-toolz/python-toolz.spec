@@ -61,8 +61,10 @@ BuildRequires:  python%{python3_pkgversion}-pip
 %py3_install
 
 %check
-pip3 install nose
-nosetests
+pip3 install packaging==23.2 pytest
+# nose is incompatible with Python 3.12 (no 'imp' module), using pytest instead
+# Exclude test_inspect_wrapped_property (Python 3.12 inspect behavior change)
+python3 -m pytest toolz/tests/ -k "not test_inspect_wrapped_property"
 
 %files -n python%{python3_pkgversion}-%{srcname}
 %license LICENSE.txt

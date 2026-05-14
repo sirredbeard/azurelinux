@@ -35,7 +35,8 @@ pycodestyle is a tool to check your Python code against some of the style conven
 %py3_install
 
 %check
-pip3 install tox
+# pin packaging==23.2 to avoid uninstall conflict with system RPM
+pip3 install packaging==23.2 tox
 tox -e py%{python3_version_nodots}
 
 %files -n python3-pycodestyle

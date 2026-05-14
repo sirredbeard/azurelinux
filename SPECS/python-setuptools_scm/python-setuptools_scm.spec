@@ -63,7 +63,8 @@ It also handles file finders for the supported scm’s.
 
 %if %{with_check}
 %check
-pip3 install tox tox-current-env
+# pin packaging==23.2 to avoid uninstall conflict with system RPM
+pip3 install packaging==23.2 tox tox-current-env
 tox -e py%{python3_version_nodots}
 %endif
 

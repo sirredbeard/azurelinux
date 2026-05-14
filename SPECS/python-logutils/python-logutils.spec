@@ -38,6 +38,10 @@ Requires:       python3-libs
 
 %prep
 %setup -q -n %{pkgname}-%{version}
+# Fix Python 3.12 compat: assertEquals removed, and tests need explicit log level
+sed -i 's/self\.assertEquals/self.assertEqual/g' tests/test_dictconfig.py
+sed -i '/l\.addHandler(h)/a\        l.setLevel(logging.WARNING)' tests/test_adapter.py tests/test_testing.py
+sed -i '/l\.addHandler(qh)/i\        l.setLevel(logging.WARNING)' tests/test_queue.py
 
 %build
 python3 setup.py build
@@ -47,6 +51,7 @@ python3 setup.py install --root=%{buildroot}
 
 %if %{with check}
 %check
+# Patch fixes Python 3.12 compat: assertEquals -> assertEqual, explicit logger level
 python3 setup.py test
 %endif
 

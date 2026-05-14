@@ -67,7 +67,7 @@ install -d %{buildroot}/%{_mandir}/man8
 install -m 644 SGML/fillup.8.gz %{buildroot}/%{_mandir}/man8
 
 %check
-make %{?_smp_mflags} test    OPTISPLUS="%{optflags}"
+make test    OPTISPLUS="%{optflags}"
 
 %files
 %defattr(-,root,root)

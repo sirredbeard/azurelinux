@@ -36,6 +36,8 @@ remoto as well to inspect Ceph clusters.
 
 %prep
 %autosetup -n %{pkgname}-%{version}
+# Fix pytest compatibility: 'setup' not auto-called on plain classes in newer pytest
+sed -i 's/def setup(self)/def setup_method(self)/' remoto/tests/test_process.py remoto/tests/test_util.py
 
 %build
 %py3_build

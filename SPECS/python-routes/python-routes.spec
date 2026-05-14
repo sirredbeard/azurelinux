@@ -48,7 +48,8 @@ python3 setup.py build
 python3 setup.py install --root=%{buildroot}
 
 %check
-pip3 install tox==3.4.0
+# pin packaging==23.2 to avoid uninstall conflict; tox 4.x needed for py312 env
+pip3 install packaging==23.2 tox
 tox -e py%{python3_version_nodots}
 
 %files -n python3-%{pkgname}

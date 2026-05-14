@@ -44,7 +44,8 @@ sed -i 's/^include test_responses\.py test_matchers\.py test_registries\.py$/rec
 %py3_install
 
 %check
-pip3 install tox
+# pin packaging==23.2 to avoid uninstall conflict with system RPM
+pip3 install packaging==23.2 tox
 tox -e py%{python3_version_nodots} --sitepackages
 
 %files -n python3-%{srcname}

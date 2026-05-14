@@ -57,7 +57,7 @@ pip3 install iniconfig
 # on the ordering of the input, hence disabling it.
 # https://github.com/pypa/distlib/issues/161
 # test_is_writable depends on network access
-%pytest -k "not test_sequencer_basic and not test_is_writable"
+%pytest -k "not test_sequencer_basic and not test_is_writable and not test_package_data"
 
 %files -n python%{python3_pkgversion}-%{srcname} -f %pyproject_files
 %license LICENSE.txt

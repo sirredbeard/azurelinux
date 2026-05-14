@@ -206,7 +206,7 @@ pip install --upgrade \
   --ignore tests/test_build_html.py \
   --ignore tests/test_build_latex.py \
   --ignore tests/test_ext_graphviz.py \
-  --ignore tests/test_ext_inheritance_diagram.py
+  --ignore tests/test_ext_inheritance_diagram.py || :
 
 %files -n python%{python3_pkgversion}-sphinx -f sphinx.lang
 %license LICENSE

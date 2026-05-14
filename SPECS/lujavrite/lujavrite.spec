@@ -30,6 +30,7 @@ export JAVA_HOME=$(find %{_libdir}/jvm -name "msopenjdk*")
 install -D -p -m 0755 lujavrite.so %{buildroot}%{lua_libdir}/%{name}.so
 
 %check
+export JAVA_HOME=$(find %{_libdir}/jvm -name "msopenjdk*")
 lua test.lua
 
 %files

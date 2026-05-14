@@ -37,7 +37,7 @@ providing a consistent API regardless of hwo the configuration was created
 %py3_install
 
 %check
-pip3 install mock wheel
+pip3 install packaging==23.2 mock wheel
 #%python3 setup.py test
 
 %files -n python3-omegaconf

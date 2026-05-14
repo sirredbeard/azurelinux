@@ -24,6 +24,7 @@ BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(icu-i18n)
 BuildRequires:  pkgconfig(icu-uc)
 BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  tzdata
 Requires:       tzdata
 
 %description
@@ -77,6 +78,8 @@ Development files needed for building things which link against %{name}-glib.
 rm %{buildroot}/%{_libexecdir}/libical/ical-glib-src-generator
 
 %check
+# Exclude tests that require full timezone data not available in chroot
+#ctest --output-on-failure -E "regression|builtin_timezones|libical-glib-array|libical-glib-component|libical-glib-timezone"
 make test ARGS="-V" -C %{_target_platform}
 
 %ldconfig_scriptlets

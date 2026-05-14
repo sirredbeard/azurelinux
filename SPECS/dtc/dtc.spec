@@ -8,6 +8,7 @@ Distribution:   Azure Linux
 Group:          Development/Tools
 URL:            https://devicetree.org/
 Source0:        https://kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.gz
+Patch0:         fix-check-err-tuple.patch
 BuildRequires:  bison
 BuildRequires:  flex
 BuildRequires:  gcc

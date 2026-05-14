@@ -42,8 +42,10 @@ export SKIP_PIP_INSTALL=1
 ln -s pbr %{buildroot}/%{_bindir}/pbr3
 
 %check
-pip3 install 'tox>=3.27.1,<4.0.0'
-tox -e py%{python3_version_nodots}
+# tox 3.x + virtualenv 21.x fails to editable-install due to setuptools isolation
+# Run tests directly with stestr instead
+pip3 install stestr testscenarios testresources six
+python3 -m stestr run --suppress-attachments
 
 %files -n python3-pbr
 %defattr(-,root,root)

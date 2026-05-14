@@ -45,6 +45,8 @@ autoreconf -fiv
 find %{buildroot} -type f -name "*.la" -delete -print
 
 %check
+# Create empty suppressions file needed by valgrind tests
+touch tests/known_issues.supp
 %make_build check
 
 %ldconfig_scriptlets
