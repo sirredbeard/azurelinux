@@ -1159,6 +1159,7 @@ components = [
     "msr-tools",
     "mstflint",
     "msv",
+    "msgpack",
     "mt-st",
     "mtdev",
     "mtools",
