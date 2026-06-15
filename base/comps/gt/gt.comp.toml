@@ -15,3 +15,9 @@ section = "%build"
 lines = [
     'export CFLAGS="$CFLAGS -std=gnu89"',
 ]
+
+[components.gt.overlays.metadata]
+category = "backport-fedora"
+commits = ["https://src.fedoraproject.org/rpms/gt/c/a8aec4724c07e306085f4b6e1a68e2ebde540359"]
+fixed-in = "gt-0.4-50.fc44"
+removable-after = "f44"

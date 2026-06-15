@@ -1,0 +1,21 @@
+[metadata]
+category = "backport-fedora"
+commits = ["https://src.fedoraproject.org/rpms/cpio/c/84d5a4fe965609681000fd3911b7246c2a6973fb"]
+fixed-in = "cpio-2.15-9.fc44"
+removable-after = "f44"
+
+# Drops cpio's BR on `rmt` plus the matching %install cleanup line. Removing
+# this dep makes the `star` component (sole provider of `rmt`) unnecessary.
+
+[[overlays]]
+description = "Drop BR on 'rmt'."
+type        = "spec-search-replace"
+regex       = ',\s*rmt\b'
+replacement = ''
+
+[[overlays]]
+description = "Drop the `rm -f $RPM_BUILD_ROOT%{_libexecdir}/rmt` line from %install. cpio's build tree no longer ships its own `rmt` helper under `_libexecdir`, so the deletion is a stale leftover."
+type        = "spec-search-replace"
+section     = "%install"
+regex       = "rm -f \\$RPM_BUILD_ROOT%\\{_libexecdir\\}/rmt"
+replacement = ""

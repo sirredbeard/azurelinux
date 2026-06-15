@@ -7,3 +7,9 @@ description = "Add missing BuildRequires for gobject-introspection-devel needed 
 type = "spec-add-tag"
 tag = "BuildRequires"
 value = "gobject-introspection-devel"
+
+[components.glade.overlays.metadata]
+category = "backport-fedora"
+commits = ["https://src.fedoraproject.org/rpms/glade/c/478c15c"]
+fixed-in = "glade-3.40.0-14.fc44"
+removable-after = "f44"

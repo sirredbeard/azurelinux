@@ -1,0 +1,38 @@
+[metadata]
+category = "azl-feature-disablement"
+
+[[overlays]]
+description = "configure: --disable-sdl"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--enable-sdl \\'
+replacement = '--disable-sdl \'
+
+[[overlays]]
+description = "configure: --disable-sdl-image"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--enable-sdl-image \\'
+replacement = '--disable-sdl-image \'
+
+[[overlays]]
+description = "Empty requires_audio_sdl macro (paired with --disable-sdl)"
+type        = "spec-search-replace"
+regex       = '%define requires_audio_sdl .*'
+replacement = '%define requires_audio_sdl %{nil}'
+
+[[overlays]]
+description = "Empty requires_ui_sdl macro"
+type        = "spec-search-replace"
+regex       = '%define requires_ui_sdl .*'
+replacement = '%define requires_ui_sdl %{nil}'
+
+[[overlays]]
+description = "Remove qemu-audio-sdl subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-sdl"
+
+[[overlays]]
+description = "Remove qemu-ui-sdl subpackage"
+type        = "spec-remove-subpackage"
+package     = "ui-sdl"

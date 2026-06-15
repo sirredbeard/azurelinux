@@ -6,6 +6,11 @@ type = "patch-add"
 file = "Policy-Fix-os_release_name-value.patch"
 source = "Policy-Fix-os_release_name-value.patch"
 
+[components.sos.overlays.metadata]
+category = "backport-fedora"
+fixed-in = "sos-4.11.0-1.fc44"
+removable-after = "f44"
+
 [[components.sos.overlays]]
 description = "Add os_release_id value to match os-release ID"
 type = "patch-add"

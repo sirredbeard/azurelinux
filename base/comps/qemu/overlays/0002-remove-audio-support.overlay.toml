@@ -1,0 +1,111 @@
+[metadata]
+category = "azl-feature-disablement"
+
+# --- JACK toggle (lives in the %globals block with the other have_* flags) ---
+
+[[overlays]]
+description = "Disable JACK audio backend"
+type        = "spec-search-replace"
+regex       = '^%global have_jack 1$'
+replacement = '%global have_jack 0'
+
+# --- configure flags: upstream lacks macros to disable these, so flip the lines directly ---
+
+[[overlays]]
+description = "configure: --disable-pipewire"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--enable-pipewire \\'
+replacement = '--disable-pipewire \'
+
+[[overlays]]
+description = "configure: --disable-pa (pulseaudio)"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--enable-pa \\'
+replacement = '--disable-pa \'
+
+[[overlays]]
+description = "configure: --disable-alsa"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--enable-alsa \\'
+replacement = '--disable-alsa \'
+
+[[overlays]]
+description = "configure: --disable-oss"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--enable-oss \\'
+replacement = '--disable-oss \'
+
+[[overlays]]
+description = "configure: clear --audio-drv-list (no backends remain)"
+type        = "spec-search-replace"
+section     = "%build"
+regex       = '--audio-drv-list=.* \\'
+replacement = '--audio-drv-list= \'
+
+# --- Unhook audio Requires from qemu-system-* emulators ---
+
+[[overlays]]
+description = "Empty requires_audio_pipewire macro"
+type        = "spec-search-replace"
+regex       = '%define requires_audio_pipewire .*'
+replacement = '%define requires_audio_pipewire %{nil}'
+
+[[overlays]]
+description = "Empty requires_audio_pa macro"
+type        = "spec-search-replace"
+regex       = '%define requires_audio_pa .*'
+replacement = '%define requires_audio_pa %{nil}'
+
+[[overlays]]
+description = "Empty requires_audio_alsa macro"
+type        = "spec-search-replace"
+regex       = '%define requires_audio_alsa .*'
+replacement = '%define requires_audio_alsa %{nil}'
+
+[[overlays]]
+description = "Empty requires_audio_dbus macro"
+type        = "spec-search-replace"
+regex       = '%define requires_audio_dbus .*'
+replacement = '%define requires_audio_dbus %{nil}'
+
+[[overlays]]
+description = "Empty requires_audio_oss macro"
+type        = "spec-search-replace"
+regex       = '%define requires_audio_oss .*'
+replacement = '%define requires_audio_oss %{nil}'
+
+# --- Remove the (no-longer-built) audio sub-packages ---
+
+[[overlays]]
+description = "Remove qemu-audio-pipewire subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-pipewire"
+
+[[overlays]]
+description = "Remove qemu-audio-pa subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-pa"
+
+[[overlays]]
+description = "Remove qemu-audio-alsa subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-alsa"
+
+[[overlays]]
+description = "Remove qemu-audio-dbus subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-dbus"
+
+[[overlays]]
+description = "Remove qemu-audio-oss subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-oss"
+
+[[overlays]]
+description = "Remove qemu-audio-jack subpackage"
+type        = "spec-remove-subpackage"
+package     = "audio-jack"

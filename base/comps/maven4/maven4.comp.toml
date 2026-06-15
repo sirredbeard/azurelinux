@@ -11,3 +11,9 @@ type = "spec-search-replace"
 section = "%install"
 regex = '.*openjdk21.*'
 replacement = ''
+
+[components.maven4.overlays.metadata]
+category = "backport-fedora"
+commits = ["https://src.fedoraproject.org/rpms/maven4/c/4b6c6ee"]
+fixed-in = "maven4-4.0.0~rc.4-12.fc44"
+removable-after = "f44"

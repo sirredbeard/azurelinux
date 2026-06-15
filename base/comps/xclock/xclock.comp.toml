@@ -7,3 +7,9 @@ type = "spec-search-replace"
 section = "%build"
 regex = 'autoreconf -v --install'
 replacement = 'autoreconf -v --install --force'
+
+[components.xclock.overlays.metadata]
+category = "backport-fedora"
+commits = ["https://src.fedoraproject.org/rpms/xclock/c/1e407488967006428f14fa87fe0cd63e6cf77ce0"]
+fixed-in = "xclock-1.1.1-11.fc44"
+removable-after = "f44"

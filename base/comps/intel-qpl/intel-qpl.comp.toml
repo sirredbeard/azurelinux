@@ -20,3 +20,9 @@ description = "Disable ThreadSanitizer in release build (perf overhead + breaks 
 type = "spec-search-replace"
 regex = '-DSANITIZE_THREADS=ON'
 replacement = "-DSANITIZE_THREADS=OFF"
+
+[components.intel-qpl.overlays.metadata]
+category = "backport-fedora"
+commits = ["https://src.fedoraproject.org/rpms/intel-qpl/c/7a433cf7338f7922f90b8819bcfd3b9fb9d4cb35"]
+fixed-in = "intel-qpl-1.8.0-2.fc44"
+removable-after = "f44"
