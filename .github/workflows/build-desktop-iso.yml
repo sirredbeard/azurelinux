@@ -1,0 +1,113 @@
+name: Build Azure Linux Desktop ISO
+
+on:
+  push:
+    branches: ["haydens_iso"]
+    paths:
+      - "base/images/vm-iso-installer/**"
+      - ".github/workflows/build-desktop-iso.yml"
+  workflow_dispatch:
+
+jobs:
+  build-iso:
+    runs-on: ubuntu-24.04
+    container:
+      image: fedora:44
+      options: --privileged --device /dev/loop-control
+    timeout-minutes: 180
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install kiwi-ng and build dependencies
+        run: |
+          dnf5 install -y \
+            kiwi \
+            python3-kiwi \
+            kiwi-systemdeps-iso-media \
+            kiwi-systemdeps-filesystems \
+            createrepo_c \
+            dnf5 \
+            grub2-efi-x64-modules \
+            shim-x64 \
+            curl \
+            git \
+            tar
+          kiwi-ng --version
+
+      - name: Ensure loop devices exist
+        run: |
+          for i in $(seq 0 7); do
+            [ -e /dev/loop$i ] || mknod /dev/loop$i b 7 $i
+          done
+          ls /dev/loop* | head
+
+      - name: Import GPG keys
+        run: |
+          rpm --import https://src.fedoraproject.org/rpms/fedora-repos/raw/rawhide/f/RPM-GPG-KEY-fedora-44-primary
+          rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
+      - name: Download Bluecurve theme
+        run: |
+          git clone --depth=1 https://github.com/neeeeow/Bluecurve.git /tmp/Bluecurve
+          mkdir -p /tmp/bluecurve-stage/usr/share
+          cp -a /tmp/Bluecurve/themes /tmp/bluecurve-stage/usr/share/
+          cp -a /tmp/Bluecurve/icons  /tmp/bluecurve-stage/usr/share/
+          mkdir -p /tmp/bluecurve-stage/usr/share/fonts
+          cp -a /tmp/Bluecurve/fonts  /tmp/bluecurve-stage/usr/share/fonts/luxi
+          mkdir -p /tmp/bluecurve-stage/usr/share/backgrounds
+          cp -a /tmp/Bluecurve/wallpapers /tmp/bluecurve-stage/usr/share/backgrounds/bluecurve
+          cp /tmp/Bluecurve/azurelinux-logo.png \
+             /tmp/bluecurve-stage/usr/share/pixmaps/azurelinux-logo.png 2>/dev/null || true
+          mkdir -p base/images/vm-iso-installer/root/usr/share/azl-installer
+          tar -czf base/images/vm-iso-installer/root/usr/share/azl-installer/bluecurve.tar.gz \
+            -C /tmp/bluecurve-stage .
+          echo "Bluecurve tarball: $(du -sh base/images/vm-iso-installer/root/usr/share/azl-installer/bluecurve.tar.gz)"
+
+      - name: Build ISO
+        run: |
+          kiwi-ng --debug --logfile stdout \
+            --profile vm-iso-installer \
+            --type iso \
+            system build \
+            --description base/images/vm-iso-installer \
+            --target-dir /tmp/azl-desktop-iso
+        env:
+          PYTHONUNBUFFERED: "1"
+
+      - name: Upload kiwi build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kiwi-build-log
+          path: /tmp/azl-desktop-iso/build/image-root.log
+          retention-days: 7
+
+      - name: Rename ISO with date and arch
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mv /tmp/azl-desktop-iso/*.iso /tmp/azl-desktop-iso/azurelinux-desktop-${DATE}-amd64.iso
+          echo "ISO_PATH=/tmp/azl-desktop-iso/azurelinux-desktop-${DATE}-amd64.iso" >> $GITHUB_ENV
+          echo "RELEASE_TAG=${DATE}" >> $GITHUB_ENV
+
+      - name: Create GitHub Release and upload ISO
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Azure Linux Desktop ${{ env.RELEASE_TAG }}
+          body: |
+            Azure Linux 4.0 Desktop ISO — amd64
+
+            Built from branch `haydens_iso`.
+
+            **Desktop environment:** XFCE4 with Bluecurve theme
+            **Browser:** Microsoft Edge
+            **Shell:** PowerShell 7
+            **Packages:** Azure Linux 4.0 core + Fedora 44 desktop packages
+            **Hardware:** Optimised for ThinkPad T470s (TLP, fprintd, firmware)
+          files: ${{ env.ISO_PATH }}
+          draft: false
+          prerelease: false

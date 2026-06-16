@@ -1,24 +1,25 @@
-# Azure Linux 4.0 — Anaconda Kickstart (Offline)
+# Azure Linux 4.0 Desktop — Anaconda Kickstart (Offline + Fedora 44)
 
-# Installation source — local repo bundled on the ISO
+# Primary installation source — offline repo bundled on the ISO
 repo --name=azl-offline --baseurl=file:///opt/azl-offline-repo/
 
-# Disable any system repos so only the offline repo is used
-# (handled by disabling .repo files before anaconda starts)
+# Fedora 44 repo for runtime updates after install
+repo --name=fedora44 --baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Everything/$basearch/os/ --cost=80
+repo --name=fedora44-updates --baseurl=https://dl.fedoraproject.org/pub/fedora/linux/updates/44/Everything/$basearch/ --cost=80
 
 # System settings
 lang en_US.UTF-8
 keyboard us
-timezone UTC --utc
+timezone US/Eastern --utc
 selinux --enforcing
 firewall --enabled --ssh
-network --hostname=azurelinux
-services --enabled=sshd,systemd-networkd,systemd-resolved
+network --bootproto=dhcp --device=link --onboot=yes --hostname=azurelinux-desktop
+services --enabled=lightdm,NetworkManager,bluetooth,tlp,thermald,fprintd,acpid
+services --disabled=systemd-networkd
 
-# Bootloader
-bootloader --location=mbr --append="console=ttyS0,115200 console=tty0"
+# Bootloader — graphical, laptop-friendly (no serial console)
+bootloader --location=mbr --append="quiet splash"
 
-# Eject installation media and reboot automatically after install
 reboot --eject
 
 # Disk layout — LVM without encryption
@@ -27,15 +28,34 @@ part /boot/efi --fstype=efi --size=600
 part /boot --fstype=ext4 --size=1024
 part pv.01 --size=1 --grow
 volgroup vg_azl pv.01
-logvol swap --vgname=vg_azl --name=lv_swap --fstype=swap --size=512
+logvol swap --vgname=vg_azl --name=lv_swap --fstype=swap --size=2048
 logvol / --vgname=vg_azl --name=lv_root --fstype=ext4 --size=1 --grow
 
 @@PACKAGES@@
+
+# Copy Bluecurve theme and XFCE defaults from installer environment to target
+%post --nochroot --log=/mnt/sysroot/var/log/anaconda-desktop.log
+mkdir -p /mnt/sysroot/usr/share/azl-installer
+# Theme tarball was extracted into the live env by KIWI <archive>
+if [ -f /usr/share/azl-installer/bluecurve.tar.gz ]; then
+    cp /usr/share/azl-installer/bluecurve.tar.gz /mnt/sysroot/usr/share/azl-installer/
+fi
+# XFCE per-channel defaults
+if [ -d /usr/share/azl-installer/xfce-defaults ]; then
+    cp -r /usr/share/azl-installer/xfce-defaults /mnt/sysroot/usr/share/azl-installer/
+fi
+# Helper scripts + assets
+    [ -f /usr/share/azl-installer/"$f" ] && \
+        cp /usr/share/azl-installer/"$f" /mnt/sysroot/usr/share/azl-installer/
+done
+%end
 
 %post --nochroot --log=/mnt/sysroot/var/log/anaconda-post.log
 cp /root/post-install.sh /mnt/sysroot/tmp/
 chroot /mnt/sysroot bash /tmp/post-install.sh
 rm -f /mnt/sysroot/tmp/post-install.sh
+# Clean up installer assets from target (optional: keep for debugging)
+rm -rf /mnt/sysroot/usr/share/azl-installer
 %end
 
 %post --nochroot --log=/mnt/sysroot/var/log/anaconda-bootloader.log

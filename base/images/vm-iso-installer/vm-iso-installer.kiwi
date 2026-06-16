@@ -6,9 +6,8 @@
     <description type="system">
         <author>Azure Linux</author>
         <contact>azurelinux@microsoft.com</contact>
-        <specification>Azure Linux 4.0 ISO Installer</specification>
+        <specification>Azure Linux 4.0 Desktop ISO Installer</specification>
     </description>
-    <!-- See vm-base.kiwi for an explanation of the canonical / -dev profiles. -->
     <profiles>
         <profile name="vm-iso-installer"     description="Ships azurelinux-repos (runtime → PMC beta)" import="false" />
         <profile name="vm-iso-installer-dev" description="Ships azurelinux-repos-dev (runtime → azl4-dev)" import="false" />
@@ -27,18 +26,25 @@
             kernelcmdline="console=ttyS0,115200 console=tty0 enforcing=0 audit=0 inst.text inst.lang=en_US.UTF-8 inst.nokill"
             firmware="uefi"
             hybridpersistent="false"
-            mediacheck="true">
+            mediacheck="false">
             <bootloader name="grub2" timeout="5" grub_template="grub_template.cfg" />
         </type>
     </preferences>
 
-    <!-- Single build-time repository (see vm-base.kiwi).
-         vm-iso-installer/config.sh ALSO uses this URL directly to populate
-         the offline repo bundled on the ISO; if this URL changes, update
-         AZL_BASE_URL in config.sh too. -->
     <repository type="rpm-md" alias="azurelinux-base">
         <source
             path="https://stcontroltowerdevjwisitg.blob.core.windows.net/azl4-dev/base/$basearch" />
+    </repository>
+
+    <!-- Fedora 44: desktop packages not in AZL. Lower priority (higher number) so
+         AZL wins when both repos provide a package. Not imageinclude — these
+         repos are for build time only; the installed system gets them via
+         the fedora44.repo file in the root overlay. -->
+    <repository type="rpm-md" alias="fedora44" priority="99">
+        <source path="https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Everything/$basearch/os/" />
+    </repository>
+    <repository type="rpm-md" alias="fedora44-updates" priority="99">
+        <source path="https://dl.fedoraproject.org/pub/fedora/linux/updates/44/Everything/$basearch/" />
     </repository>
 
     <packages type="image">
@@ -67,6 +73,8 @@
         <package name="tar" />
         <package name="util-linux" />
         <package name="vim-minimal" />
+
+        <!-- Installer config files -->
         <file
             name="20-wired-dhcp.network"
             target="/etc/systemd/network/20-wired-dhcp.network"
@@ -96,6 +104,10 @@
             target="/root/post-bootloader.sh"
             permissions="0755" />
 
+        <!-- Icon rasterization script -->
+
+        <!-- Bluecurve theme tarball (created by GitHub Actions workflow) -->
+
         <!-- UEFI boot -->
         <package name="grub2" />
         <package name="grub2-efi-x64" arch="x86_64" />
@@ -106,13 +118,13 @@
         <package name="shim" arch="aarch64" />
         <package name="efibootmgr" />
 
-        <!-- ISO live boot (Fedora dmsquash-live) -->
+        <!-- ISO live boot -->
         <package name="dracut-live" />
 
         <!-- Hyper-V guest integration -->
         <package name="hyperv-daemons" />
 
-        <!-- Anaconda TUI installer (deps resolved automatically) -->
+        <!-- Anaconda TUI installer -->
         <package name="anaconda-core" />
         <package name="anaconda-tui" />
         <package name="anaconda-install-env-deps" />
@@ -121,11 +133,6 @@
         <package name="createrepo_c" />
     </packages>
 
-    <!--
-        Variant-scoped repos package: governs the .repo files written
-        into /etc/yum.repos.d/ in the built image (runtime). The two
-        packages conflict, so they're separated into per-variant sections.
-    -->
     <packages type="image" profiles="vm-iso-installer-dev">
         <package name="azurelinux-repos-dev" />
     </packages>

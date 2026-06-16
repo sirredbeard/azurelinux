@@ -1,0 +1,101 @@
+[fedora44]
+name=Fedora 44 - $basearch
+baseurl=https://dl.fedoraproject.org/pub/fedora/linux/releases/44/Everything/$basearch/os/
+enabled=1
+gpgcheck=1
+gpgkey=https://src.fedoraproject.org/rpms/fedora-repos/raw/rawhide/f/RPM-GPG-KEY-fedora-44-primary
+metadata_expire=7d
+priority=80
+includepkgs=NetworkManager NetworkManager-bluetooth NetworkManager-libnm \
+ NetworkManager-tui NetworkManager-wifi Thunar acpi acpid \
+ adwaita-mono-fonts adwaita-sans-fonts at-spi2-atk at-spi2-core atk \
+ blueman bluez bluez-libs brightnessctl bubblewrap cups cups-filters \
+ cups-libs dbus-x11 default-fonts desktop-backgrounds-compat \
+ elementary-xfce-icon-theme -runtime exo \
+ f44-backgrounds-base faad2-libs fdk-aac-free file-roller flite \
+ fprintd garcon gcr-libs gdk-pixbuf2 gdk-pixbuf2-modules-extra \
+ geoclue2 glycin-libs glycin-loaders gnome-icon-theme \
+ gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free-libs \
+ gstreamer1-plugins-good gtk-layer-shell gtk-update-icon-cache gtk3 \
+ gtk4 gtkmm4.0 gvfs gvfs-client gvfs-fuse iceauth imlib2 \
+ keybinder3 libXpresent libadwaita libaom \
+ libavcodec-free libavformat-free libavif libavutil-free libbluray \
+ libcamera libcamera-ipa libcanberra libcanberra-gtk3 \
+ libcdio-paranoia libchromaprint libcue libdav1d libdbusmenu \
+ libdbusmenu-gtk3 libdrm libepoxy libfprint libheif libimobiledevice \
+ libimobiledevice-glue libopenmpt libplist libportal libportal-gtk4 \
+ librsvg2 librsvg2-tools libswresample-free libudfread libusbmuxd \
+ libv4l libwnck3 libxfce4ui libxfce4util libxfce4windowing \
+ libxklavier lightdm lightdm-gtk lightdm-gtk-greeter linux-firmware \
+ linux-firmware-whence localsearch low-memory-monitor mesa \
+ mesa-dri-drivers mesa-libEGL mesa-libGL mesa-libgbm mesa-va-drivers \
+ mesa-vulkan-drivers network-manager-applet nilfs-utils \
+ ntfs-3g-system-compression openal-soft opus pavucontrol pipewire \
+ pipewire-alsa pipewire-devel pipewire-jack-audio-connection-kit \
+ pipewire-jack-audio-connection-kit-libs pipewire-libs \
+ pipewire-plugin-libcamera pipewire-pulseaudio pipewire-utils \
+ powertop pulseaudio-libs pulseaudio-libs-glib2 pulseaudio-utils \
+ qrencode-libs rav1e-libs redhat-menus rtkit selinux-policy \
+ selinux-policy-targeted setxkbmap soundtouch svt-av1-libs taglib \
+ thermald tigervnc-license tigervnc-selinux tigervnc-server-common \
+ tigervnc-x11-server tlp tlp-rdw totem-pl-parser tumbler udftools \
+ upower upower-libs usbmuxd wavpack \
+ webrtc-audio-processing wireplumber wireplumber-libs wpa_supplicant \
+ xdg-desktop-portal xdg-desktop-portal-gtk xfce-polkit \
+ xfce4-appfinder xfce4-notifyd xfce4-panel xfce4-power-manager \
+ xfce4-pulseaudio-plugin xfce4-screensaver xfce4-session \
+ xfce4-settings xfce4-terminal xfce4-whiskermenu-plugin xfconf \
+ xfdesktop xfwm4 xhost xkeyboard-config xorg-x11-drv-libinput \
+ xorg-x11-fonts-misc xorg-x11-server-Xorg xorg-x11-server-common \
+ xorg-x11-utils xorg-x11-xauth xorg-x11-xinit xrdp xrdp-selinux xset
+
+[fedora44-updates]
+name=Fedora 44 Updates - $basearch
+baseurl=https://dl.fedoraproject.org/pub/fedora/linux/updates/44/Everything/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://src.fedoraproject.org/rpms/fedora-repos/raw/rawhide/f/RPM-GPG-KEY-fedora-44-primary
+metadata_expire=7d
+priority=80
+includepkgs=NetworkManager NetworkManager-bluetooth NetworkManager-libnm \
+ NetworkManager-tui NetworkManager-wifi Thunar acpi acpid \
+ adwaita-mono-fonts adwaita-sans-fonts at-spi2-atk at-spi2-core atk \
+ blueman bluez bluez-libs brightnessctl bubblewrap cups cups-filters \
+ cups-libs dbus-x11 default-fonts desktop-backgrounds-compat \
+ elementary-xfce-icon-theme -runtime exo \
+ f44-backgrounds-base faad2-libs fdk-aac-free file-roller flite \
+ fprintd garcon gcr-libs gdk-pixbuf2 gdk-pixbuf2-modules-extra \
+ geoclue2 glycin-libs glycin-loaders gnome-icon-theme \
+ gstreamer1-plugins-bad-free gstreamer1-plugins-bad-free-libs \
+ gstreamer1-plugins-good gtk-layer-shell gtk-update-icon-cache gtk3 \
+ gtk4 gtkmm4.0 gvfs gvfs-client gvfs-fuse iceauth imlib2 \
+ keybinder3 libXpresent libadwaita libaom \
+ libavcodec-free libavformat-free libavif libavutil-free libbluray \
+ libcamera libcamera-ipa libcanberra libcanberra-gtk3 \
+ libcdio-paranoia libchromaprint libcue libdav1d libdbusmenu \
+ libdbusmenu-gtk3 libdrm libepoxy libfprint libheif libimobiledevice \
+ libimobiledevice-glue libopenmpt libplist libportal libportal-gtk4 \
+ librsvg2 librsvg2-tools libswresample-free libudfread libusbmuxd \
+ libv4l libwnck3 libxfce4ui libxfce4util libxfce4windowing \
+ libxklavier lightdm lightdm-gtk lightdm-gtk-greeter linux-firmware \
+ linux-firmware-whence localsearch low-memory-monitor mesa \
+ mesa-dri-drivers mesa-libEGL mesa-libGL mesa-libgbm mesa-va-drivers \
+ mesa-vulkan-drivers network-manager-applet nilfs-utils \
+ ntfs-3g-system-compression openal-soft opus pavucontrol pipewire \
+ pipewire-alsa pipewire-devel pipewire-jack-audio-connection-kit \
+ pipewire-jack-audio-connection-kit-libs pipewire-libs \
+ pipewire-plugin-libcamera pipewire-pulseaudio pipewire-utils \
+ powertop pulseaudio-libs pulseaudio-libs-glib2 pulseaudio-utils \
+ qrencode-libs rav1e-libs redhat-menus rtkit selinux-policy \
+ selinux-policy-targeted setxkbmap soundtouch svt-av1-libs taglib \
+ thermald tigervnc-license tigervnc-selinux tigervnc-server-common \
+ tigervnc-x11-server tlp tlp-rdw totem-pl-parser tumbler udftools \
+ upower upower-libs usbmuxd wavpack \
+ webrtc-audio-processing wireplumber wireplumber-libs wpa_supplicant \
+ xdg-desktop-portal xdg-desktop-portal-gtk xfce-polkit \
+ xfce4-appfinder xfce4-notifyd xfce4-panel xfce4-power-manager \
+ xfce4-pulseaudio-plugin xfce4-screensaver xfce4-session \
+ xfce4-settings xfce4-terminal xfce4-whiskermenu-plugin xfconf \
+ xfdesktop xfwm4 xhost xkeyboard-config xorg-x11-drv-libinput \
+ xorg-x11-fonts-misc xorg-x11-server-Xorg xorg-x11-server-common \
+ xorg-x11-utils xorg-x11-xauth xorg-x11-xinit xrdp xrdp-selinux xset
